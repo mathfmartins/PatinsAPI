@@ -14,7 +14,7 @@ namespace PatinsAPI.Profiles
         {
             CreateMap<PostPatinsDto, Patins>();
             CreateMap<PutPatinsDto, Patins>();
-
+            CreateMap<Patins, GetPatinsByIdDto>();
         }
     }
 }

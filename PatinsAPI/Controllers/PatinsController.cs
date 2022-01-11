@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using PatinsAPI.Models;
 using PatinsAPI.Data;
+using PatinsAPI.Dtos;
+using AutoMapper;
 
 namespace PatinsAPI.Controllers
 {
@@ -13,14 +15,17 @@ namespace PatinsAPI.Controllers
     public class PatinsController : ControllerBase
     {
         private PatinsContext _context;
-        public PatinsController(PatinsContext context)
+        private IMapper _mapper;
+        public PatinsController(PatinsContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult PostPatins([FromBody] Patins patins)
+        public IActionResult PostPatins([FromBody] PostPatinsDto patinsDto)
         {
+            Patins patins = _mapper.Map<Patins>(patinsDto);
             _context.Patins.Add(patins);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetPatinsById), new { patins.Id }, patins);
@@ -37,22 +42,21 @@ namespace PatinsAPI.Controllers
         {
             Patins patins = _context.Patins.Where((patins) => patins.Id == id).FirstOrDefault();
             if (patins != null)
-                return Ok(patins);
+            {
+                GetPatinsByIdDto patinsDto = _mapper.Map<GetPatinsByIdDto>(patins);
+                return Ok(patinsDto);
+            }
             else
                 return NotFound();
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutPatins(int id, [FromBody] Patins patins)
+        public IActionResult PutPatins(int id, [FromBody] PutPatinsDto patinsDto)
         {
             Patins patinsDb = _context.Patins.Where((patins) => patins.Id == id).FirstOrDefault();
             if (patinsDb != null)
             {
-                patinsDb.Id = patins.Id;
-                patinsDb.Nome = patins.Nome;
-                patinsDb.Modelo = patins.Modelo;
-                patinsDb.Numero = patins.Numero;
-                patinsDb.Marca = patins.Marca;
+                _mapper.Map(patinsDto, patinsDb);
                 _context.SaveChanges();
                 return NoContent();
             }
