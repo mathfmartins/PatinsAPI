@@ -48,7 +48,7 @@ namespace PatinsAPI.Controllers
             Patins patinsDb = _context.Patins.Where((patins) => patins.Id == id).FirstOrDefault();
             if (patinsDb != null)
             {
-                //patinsDb.Id = patins.Id;
+                patinsDb.Id = patins.Id;
                 patinsDb.Nome = patins.Nome;
                 patinsDb.Modelo = patins.Modelo;
                 patinsDb.Numero = patins.Numero;
