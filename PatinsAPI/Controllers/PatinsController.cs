@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PatinsAPI.Models;
+using PatinsAPI.Data;
 
 namespace PatinsAPI.Controllers
 {
@@ -11,25 +12,30 @@ namespace PatinsAPI.Controllers
     [Route("[controller]")]
     public class PatinsController : ControllerBase
     {
-        private static IList<Patins> _patins = new List<Patins>();
+        private PatinsContext _context;
+        public PatinsController(PatinsContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost]
         public IActionResult PostPatins([FromBody] Patins patins)
         {
-            _patins.Add(patins);
+            _context.Patins.Add(patins);
+            _context.SaveChanges();
             return CreatedAtAction(nameof(GetPatinsById), new { patins.Id }, patins);
         }
 
         [HttpGet]
         public IActionResult GetPatins()
         {
-            return Ok(_patins);
+            return Ok(_context.Patins);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetPatinsById(int id)
         {
-            var patins = _patins.Where((patins) => patins.Id == id).FirstOrDefault();
+            Patins patins = _context.Patins.Where((patins) => patins.Id == id).FirstOrDefault();
             if (patins != null)
                 return Ok(patins);
             else
@@ -39,7 +45,7 @@ namespace PatinsAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult PutPatins(int id, [FromBody] Patins patins)
         {
-            var patinsDb = _patins.Where((patins) => patins.Id == id).FirstOrDefault();
+            Patins patinsDb = _context.Patins.Where((patins) => patins.Id == id).FirstOrDefault();
             if (patinsDb != null)
             {
                 patinsDb.Id = patins.Id;
@@ -47,6 +53,7 @@ namespace PatinsAPI.Controllers
                 patinsDb.Modelo = patins.Modelo;
                 patinsDb.Numero = patins.Numero;
                 patinsDb.Marca = patins.Marca;
+                _context.SaveChanges();
                 return NoContent();
             }
             else
@@ -56,10 +63,11 @@ namespace PatinsAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletePatins(int id)
         {
-            var patins = _patins.Where((patins) => patins.Id == id).FirstOrDefault();
+            var patins = _context.Patins.Where((patins) => patins.Id == id).FirstOrDefault();
             if (patins != null)
             {
-                _patins.Remove(patins);
+                _context.Patins.Remove(patins);
+                _context.SaveChanges();
                 return NoContent();
             }
             else

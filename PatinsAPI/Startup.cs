@@ -35,7 +35,7 @@ namespace PatinsAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PatinsAPI", Version = "v1" });
             });
 
-            services.AddDbContext<PatinsContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("PatinsConnection");
+            services.AddDbContext<PatinsContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("PatinsConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
