@@ -7,6 +7,7 @@ namespace PatinsAPI.Models
 {
     public class Patins
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public int Numero { get; set; }
         public string Modelo { get; set; }
