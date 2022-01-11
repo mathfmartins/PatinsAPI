@@ -36,6 +36,7 @@ namespace PatinsAPI
             });
 
             services.AddDbContext<PatinsContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("PatinsConnection")));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
