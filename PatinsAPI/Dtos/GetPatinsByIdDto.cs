@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PatinsAPI.Dtos
 {
-    public class GetPatinsDto
+    public class GetPatinsByIdDto
     {
-        public GetPatinsDto()
+        public GetPatinsByIdDto()
         {
-            DateTime = DateTime.Now;
+            HoraDaConsulta = DateTime.Now;
         }
 
         [Key]
@@ -29,6 +29,6 @@ namespace PatinsAPI.Dtos
         [Required(ErrorMessage = "Marca deve ser informada")]
         [StringLength(20, ErrorMessage = "Marca deve ter no máximo 20 caracteres")]
         public string Marca { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime HoraDaConsulta { get; set; }
     }
 }
